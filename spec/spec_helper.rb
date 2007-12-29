@@ -4,6 +4,7 @@ dir = File.dirname(__FILE__)
 $LOAD_PATH.unshift File.expand_path("#{dir}/../lib")
 require "lsof"
 require "rr"
+require "fileutils"
 require "eventmachine"
 
 Spec::Runner.configure do |config|
