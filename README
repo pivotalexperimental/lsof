@@ -4,5 +4,5 @@ Functions include getting the pid and killing a process that listens on a partic
 
 == Usage
   Lsof.running?(6666) # returns true if there is the process that listens on port 6666
-  Lsof.kill(6666) # kill the process that listens on port 6666
-  Lsof.listener_pid(6666) # returns the process id for the process that listens on port 6666
+  Lsof.kill(6666) # kill the processes that listens on port 6666
+  Lsof.listener_pids(6666) # returns the process ids for the process that listens on port 6666

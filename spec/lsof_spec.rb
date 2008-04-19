@@ -18,19 +18,21 @@ describe Lsof do
 
   def start_process_using_port
     Thread.start do
-      cmd = <<-CMD
-        ruby -e '
-                  File.open("lsof.pid", "w") do |file|
-                    file.print Process.pid.to_s
-                  end
-                  require "rubygems"
-                  require "eventmachine"
-                  EventMachine::run do
-                    EventMachine::start_server "127.0.0.1", #{port}, EventMachine::Protocols::LineAndTextProtocol
-                  end
-                '2>&1
-      CMD
-      `#{cmd}`
+      src = <<-SRC
+        def start_server(pid_file)
+          File.open(pid_file, "w") do |file|
+            file.print Process.pid.to_s
+          end
+          require "rubygems"
+          require "eventmachine"
+          EventMachine::run do
+            EventMachine::start_server "127.0.0.1", #{port}, EventMachine::Protocols::LineAndTextProtocol
+          end
+        end
+
+        start_server "lsof.pid"
+      SRC
+      `ruby -e '#{src}' 2>&1`
     end
     wait_for do
       Lsof.running?(port)
@@ -54,13 +56,15 @@ describe Lsof do
   end
 
   describe '.kill' do
-    it "kills all processes associated with a provided port" do
-      start_process_using_port
-      hide_error_stream do
-        Lsof.kill port
-      end
-      wait_for do
-        !Lsof.running?(port)
+    describe "when there is only one process listening to the port" do
+      it "kills all processes associated with a provided port" do
+        start_process_using_port
+        hide_error_stream do
+          Lsof.kill port
+        end
+        wait_for do
+          !Lsof.running?(port)
+        end
       end
     end
   end
@@ -76,15 +80,15 @@ describe Lsof do
     end
   end
 
-  describe ".listener_pid" do
-    it "when there is a process listening on a port, returns the process id" do
+  describe ".listener_pids" do
+    it "when there is a process listening on a port, returns the process id in an Array" do
       start_process_using_port
-      pid = Lsof.listener_pid(port)
-      pid.should == pid_of_process
+      pid = Lsof.listener_pids(port)
+      pid.should == [pid_of_process]
     end
 
-    it "when there is no process listening on a port, returns nil" do
-      Lsof.listener_pid(port).should == nil
+    it "when there is no process listening on a port, returns []" do
+      Lsof.listener_pids(port).should == []
     end
   end
 end

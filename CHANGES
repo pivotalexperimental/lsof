@@ -1,0 +1,6 @@
+0.2.0
+- Handles multiple processes listening to the pid
+- Changed Lsof.listener_pid to Lsof.listener_pids
+
+0.1.0
+- Initial Release
