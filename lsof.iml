@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Ruby SDK" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="gems" level="project" />
     <orderEntryProperties />
   </component>
   <component name="RModuleContentRootManager">
