@@ -66,7 +66,22 @@ describe Lsof do
     end
 
     it "when there is no process using the port, returns false" do
+      sleep 1
       Lsof.running?(port).should be_false
+    end
+  end
+  
+  describe ".running_remotely?" do
+    it "should return true when there is a process on the port" do
+      start_process_using_port
+      Lsof.running_remotely?("localhost", port).should be_true
+    end
+
+    it "should return false when there is no process on the port" do
+      wait_for do
+        !Lsof.running_remotely?("localhost", port)
+      end
+      Lsof.running_remotely?("localhost", port).should be_false
     end
   end
 

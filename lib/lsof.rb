@@ -8,6 +8,12 @@ class Lsof
     def running?(port)
       listener_pids(port).empty? ? false : true
     end
+    
+    # this isn't really lsof, but it's solving the same problem
+    def running_remotely?(server, port)
+      TCPSocket.new(server, port).close rescue return false
+      return true
+    end
 
     def listener_pids(port)
       output = `#{find_pids_cmd(port)}`
