@@ -20,6 +20,16 @@ task(:tag_release) do
   tag_release
 end
 
+desc "Run GemInstaller"
+task(:geminstaller) do
+  require 'rubygems'
+  require 'geminstaller'
+  GemInstaller.run('--sudo')
+end
+
+desc "CruiseControl.rb task"
+task :cruise => [:geminstaller, :default]
+
 def run_suite
   dir = File.dirname(__FILE__)
   system("ruby #{dir}/spec/spec_suite.rb") || raise("Spec Suite failed")
