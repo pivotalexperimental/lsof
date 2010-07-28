@@ -13,3 +13,5 @@ Functions include getting the pid and killing a process that listens on a partic
   
 == Pivotal Tracker Bug/Feature Tracker
   http://www.pivotaltracker.com/projects/10604
+
+Copyright (c) 2010 Pivotal Labs. This software is licensed under the MIT License.
